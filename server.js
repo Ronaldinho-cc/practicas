@@ -99,19 +99,23 @@ const {
       direccion_alumno,
       new Date().toISOString().slice(0, 10), // Format the date as YYYY-MM-DD
     ]);
-  
-    // Successful insertion into the database
-    // You might want to handle the response or perform some action here
+
+    res.render("inicio", {
+      rutaActual: "/",
+    });
+//res.send(`¡Formulario procesado correctamente!`);
   } catch (error) {
-    // Handle error
-    console.error("Error inserting data into the database:", error);
+    console.error("Error al insertar en la base de datos: ", error);
+    console.log(error); // Agregar esta línea para imprimir el error completo en la consola
+    res.send("Error al procesar el formulario");
   }
-  
+});
+
 
 /**
  * Insert segunda forma
  */
-app.post("/procesar-formulario2", (req, res) => {
+app.post("/procesar-formulario2",async (req, res) => {
   console.log(req.body);
   const {
     nombre_alumno,apellido_alumno,email_alumno,curso_alumno,telefono_alumno,dni_alumno, direccion_alumno, // Corrected the name to match the HTML form
@@ -119,32 +123,22 @@ app.post("/procesar-formulario2", (req, res) => {
   try {
     const query =
     "INSERT INTO estudiantes (nombre, apellido, email, curso, dni, celular, direccion, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    connection.query(
-      query,
+  const [result] = await  connection.execute( query,
       [ nombre_alumno,apellido_alumno,email_alumno,curso_alumno,dni_alumno,telefono_alumno, // Corrected the order to match the query
-         direccion_alumno, new Date()],
-      (error, result) => {
-        if (error) {
-          console.error("Error al insertar en la base de datos: ", error);
-          res.send("Error al procesar el formulario");
-          return;
-        }
-        if (result && result.affectedRows > 0) {
-          res.send("¡Formulario procesado correctamente!");
-        } else {
-          res.send("Error al procesar el formulario");
-        }
-      }
-    );
+         direccion_alumno, new Date(),])
+	 if (result && result.affectedRows > 0) {
+      res.send("¡Formulario procesado correctamente!");
+    } else {
+      res.send("Error al procesar el formulario");
+    }
   } catch (error) {
     console.error("Error al insertar en la base de datos: ", error);
     res.send("Error al procesar el formulario");
   }
-})
-});
+      });
 
 // Iniciar el servidor con Express
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+  console.log(`Servidor escuchando en http://3.226.210.48:${PORT}`);
 });

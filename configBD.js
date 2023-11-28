@@ -1,9 +1,10 @@
 const mysql = require("mysql2");
+	
 
 const connection = mysql.createConnection({
   host: "localhost", // MYSQL HOST NAME
-  user: "root", // MYSQL USERNAME
-  password: "admin", // MYSQL PASSWORD
+  user: "ronald", // MYSQL USERNAME
+  password: "admin123", // MYSQL PASSWORD
   database: "nodejs", // MYSQL DB NAME
   port: 3306,
 });
@@ -17,7 +18,6 @@ connection.connect((err) => {
 });
 
 module.exports = connection;
-
 /**
  * En Node.js, module es un objeto global que representa el módulo actual
  * en el cual se está ejecutando el código. Proporciona una forma de exportar
